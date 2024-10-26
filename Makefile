@@ -29,6 +29,7 @@ endif
 SRCS += $(SRCS_DATA_STRUCRUES)
 SRCS_DATA_STRUCRUES	:= \
 	data_structures/data_buffer.cpp \
+	design_patterns/memento.cpp \
 
 INCS	:= \
 	. \

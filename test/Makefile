@@ -33,6 +33,10 @@ SRCS	:= \
 	test_pool.cpp \
 	main_data_buffer.cpp \
 	test_data_buffer.cpp \
+	main_memento.cpp \
+	main_observer.cpp \
+	main_singleton.cpp \
+	main_state_machine.cpp \
 
 BUILD_DIR	:= build
 
