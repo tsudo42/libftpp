@@ -41,6 +41,10 @@ SRCS	:= \
 	main_thread_safe_queue.cpp \
 	main_thread.cpp \
 	main_persistent_worker.cpp \
+	main_vector_2.cpp \
+	main_vector_3.cpp \
+	main_random_2D_coordinate_generator.cpp \
+	main_perlin_2D.cpp \
 
 BUILD_DIR	:= build
 

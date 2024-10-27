@@ -33,6 +33,10 @@ SRCS_DATA_STRUCRUES	:= \
 	threading/thread_safe_iostream.cpp \
 	threading/thread.cpp \
 	threading/persistent_worker.cpp \
+	mathematics/ivector2.cpp \
+	mathematics/ivector3.cpp \
+	mathematics/random_2D_coordinate_generator.cpp \
+	mathematics/perlin_noise_2D.cpp \
 
 INCS	:= \
 	. \
