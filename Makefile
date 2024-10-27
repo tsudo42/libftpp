@@ -32,6 +32,7 @@ SRCS_DATA_STRUCRUES	:= \
 	design_patterns/memento.cpp \
 	threading/thread_safe_iostream.cpp \
 	threading/thread.cpp \
+	threading/worker_pool.cpp \
 	threading/persistent_worker.cpp \
 	mathematics/ivector2.cpp \
 	mathematics/ivector3.cpp \

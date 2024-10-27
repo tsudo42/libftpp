@@ -4,6 +4,7 @@
 #include <thread>
 #include <functional>
 #include <deque>
+#include <atomic>
 #include <utility>
 #include <stdexcept>
 

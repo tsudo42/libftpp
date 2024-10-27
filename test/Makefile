@@ -40,6 +40,7 @@ SRCS	:= \
 	main_thread_safe_iostream.cpp \
 	main_thread_safe_queue.cpp \
 	main_thread.cpp \
+	main_worker_pool.cpp \
 	main_persistent_worker.cpp \
 	main_vector_2.cpp \
 	main_vector_3.cpp \
