@@ -29,6 +29,7 @@ endif
 SRCS += $(SRCS_DATA_STRUCRUES)
 SRCS_DATA_STRUCRUES	:= \
 	data_structures/data_buffer.cpp \
+	data_structures/argparse.cpp \
 	design_patterns/memento.cpp \
 	threading/thread_safe_iostream.cpp \
 	threading/thread.cpp \

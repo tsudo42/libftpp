@@ -46,6 +46,7 @@ SRCS	:= \
 	main_vector_3.cpp \
 	main_random_2D_coordinate_generator.cpp \
 	main_perlin_2D.cpp \
+	test_argparse.cpp \
 
 BUILD_DIR	:= build
 
