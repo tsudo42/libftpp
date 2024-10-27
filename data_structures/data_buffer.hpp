@@ -2,48 +2,91 @@
 #define DATA_BUFFER_HPP
 
 #include <vector>
-#include <exception>
+#include <string>
+#include <type_traits>
+#include <cstring>
+#include <stdexcept>
+#include <cstddef>
 
 class DataBuffer
 {
 public:
-    DataBuffer() = default;
+    DataBuffer();
+
+    DataBuffer(const DataBuffer &other);
+    DataBuffer &operator=(const DataBuffer &other);
+    DataBuffer(DataBuffer &&other) noexcept;
+    DataBuffer &operator=(DataBuffer &&other) noexcept;
+
     virtual ~DataBuffer() = default;
+
+    void swap(DataBuffer &other) noexcept;
 
     template <typename TType>
     DataBuffer &operator<<(const TType &data)
     {
-        const uint8_t *rawData = reinterpret_cast<const uint8_t *>(&data);
-        buffer.insert(buffer.end(), rawData, rawData + sizeof(TType));
+        static_assert(std::is_trivially_copyable<TType>::value, "TType must be trivially copyable");
+
+        size_t currentSize = body_.size();
+        body_.resize(currentSize + sizeof(TType));
+        std::memcpy(body_.data() + currentSize, &data, sizeof(TType));
         return *this;
     }
 
-    class InsufficientData : public std::runtime_error
-    {
-    protected:
-        static constexpr const char *msg = "Insufficient data in buffer.";
-
-    public:
-        InsufficientData() : std::runtime_error(msg) {}
-        virtual ~InsufficientData() = default;
-    };
+    DataBuffer &operator<<(const std::string &data);
 
     template <typename TType>
     DataBuffer &operator>>(TType &data)
     {
-        if (buffer.size() < sizeof(TType))
-        {
-            throw InsufficientData();
-        }
+        static_assert(std::is_trivially_copyable<TType>::value, "TType must be trivially copyable");
 
-        uint8_t *rawData = reinterpret_cast<uint8_t *>(&data);
-        std::copy(buffer.begin(), buffer.begin() + sizeof(TType), rawData);
-        buffer.erase(buffer.begin(), buffer.begin() + sizeof(TType));
+        if (read_pos_ + sizeof(TType) > body_.size())
+        {
+            throw BodyUnderflow();
+        }
+        std::memcpy(&data, body_.data() + read_pos_, sizeof(TType));
+        read_pos_ += sizeof(TType);
         return *this;
     }
 
-private:
-    std::vector<uint8_t> buffer;
+    DataBuffer &operator>>(std::string &data);
+
+    virtual void clear();
+
+    virtual std::vector<std::byte> serialize() const;
+    virtual void deserialize(const std::vector<std::byte> &buffer);
+
+    class DataBufferException : public std::runtime_error
+    {
+    public:
+        virtual ~DataBufferException() = default;
+        explicit DataBufferException(const std::string &msg);
+    };
+
+    class BodyUnderflow : public DataBufferException
+    {
+    public:
+        virtual ~BodyUnderflow() = default;
+        BodyUnderflow();
+    };
+
+    class BodySizeOutOfRange : public DataBufferException
+    {
+    public:
+        virtual ~BodySizeOutOfRange() = default;
+        BodySizeOutOfRange();
+    };
+
+    class InvalidBuffer : public DataBufferException
+    {
+    public:
+        virtual ~InvalidBuffer() = default;
+        explicit InvalidBuffer(const std::string &msg);
+    };
+
+protected:
+    std::vector<std::byte> body_;
+    size_t read_pos_;
 };
 
 #endif /* DATA_BUFFER_HPP */
