@@ -71,47 +71,19 @@ void DataBuffer::clear()
 
 std::vector<std::byte> DataBuffer::serialize() const
 {
+    if (read_pos_ > body_.size())
+    {
+        return std::vector<std::byte>();
+    }
     std::vector<std::byte> buffer;
-    buffer.resize(sizeof(int64_t) + body_.size());
-
-    size_t offset = 0;
-
-    int64_t bodySizeNetwork = static_cast<int64_t>(body_.size());
-    std::memcpy(buffer.data() + offset, &bodySizeNetwork, sizeof(int64_t));
-    offset += sizeof(int64_t);
-
-    std::memcpy(buffer.data() + offset, body_.data(), body_.size());
-
+    buffer.resize(body_.size() - read_pos_);
+    std::memcpy(buffer.data(), body_.data() + read_pos_, body_.size() - read_pos_);
     return buffer;
 }
 
 void DataBuffer::deserialize(const std::vector<std::byte> &buffer)
 {
-    if (buffer.size() < sizeof(int64_t))
-    {
-        throw InvalidBuffer("Buffer too small to contain DataBuffer");
-    }
-
-    size_t offset = 0;
-
-    int64_t bodySizeNetwork;
-    std::memcpy(&bodySizeNetwork, buffer.data() + offset, sizeof(int64_t));
-    offset += sizeof(int64_t);
-
-    if (bodySizeNetwork < 0 || static_cast<uint64_t>(bodySizeNetwork) > std::numeric_limits<std::size_t>::max())
-    {
-        throw BodySizeOutOfRange();
-    }
-    std::size_t bodySize = static_cast<std::size_t>(bodySizeNetwork);
-
-    if (offset + bodySize > buffer.size())
-    {
-        throw InvalidBuffer("Buffer does not contain full DataBuffer body");
-    }
-
-    body_.resize(bodySize);
-    std::memcpy(body_.data(), buffer.data() + offset, bodySize);
-
+    body_ = buffer;
     read_pos_ = 0;
 }
 

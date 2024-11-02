@@ -47,6 +47,7 @@ SRCS	:= \
 	main_random_2D_coordinate_generator.cpp \
 	main_perlin_2D.cpp \
 	test_argparse.cpp \
+	test_dual_key_map.cpp \
 
 BUILD_DIR	:= build
 
