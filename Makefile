@@ -35,6 +35,10 @@ SRCS_DATA_STRUCRUES	:= \
 	threading/thread.cpp \
 	threading/worker_pool.cpp \
 	threading/persistent_worker.cpp \
+	network/message.cpp \
+	network/io_multiplexer.cpp \
+	network/client.cpp \
+	network/server.cpp \
 	mathematics/ivector2.cpp \
 	mathematics/ivector3.cpp \
 	mathematics/random_2D_coordinate_generator.cpp \

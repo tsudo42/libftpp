@@ -49,11 +49,25 @@ SRCS	:= \
 	test_argparse.cpp \
 	test_dual_key_map.cpp \
 
+INDEPENDENT_SRCS	:= \
+	main_client.cpp \
+	main_server.cpp \
+	test_network_client.cpp \
+	test_network_server.cpp \
+
 BUILD_DIR	:= build
 
-OBJS	= $(patsubst %.cpp,$(BUILD_DIR)/%.o, $(notdir $(SRCS)))
-DEPS	= $(OBJS:.o=.d)
-EXECS	= $(OBJS:.o=.out)
+OBJS	= \
+	$(patsubst %.cpp,$(BUILD_DIR)/%.o, $(notdir $(SRCS))) \
+	$(patsubst %.cpp,$(BUILD_DIR)/%.o, $(notdir $(INDEPENDENT_SRCS)))
+DEPS	= \
+	$(patsubst %.cpp,$(BUILD_DIR)/%.d, $(notdir $(SRCS))) \
+	$(patsubst %.cpp,$(BUILD_DIR)/%.d, $(notdir $(INDEPENDENT_SRCS)))
+
+EXECS	= $(patsubst %.cpp,$(BUILD_DIR)/%.out, $(notdir $(SRCS)))
+
+EXECS_INDEPENDENT	= $(patsubst %.cpp,$(BUILD_DIR)/%.out, $(notdir $(INDEPENDENT_SRCS)))
+
 vpath %.cpp $(sort $(dir $(SRCS)))
 
 GR	= \033[32;1m
@@ -71,14 +85,12 @@ run: tests
 		./$(test) || exit 1;)
 	@printf "$(CY)~~~ TESTS COMPLETED ~~~$(RC)\n"
 
-all: tests
-
 -include $(DEPS)
 
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
 
-tests: $(EXECS)
+tests: $(EXECS) $(EXECS_INDEPENDENT)
 	@printf "\n$(GR)=== Compiled [$(CXX) $(CXXFLAGS)] ==="
 	@printf "\n--- $(notdir $(SRCS))$(RC)\n"
 

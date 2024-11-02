@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <thread>
+#include <mutex>
 #include <stdexcept>
 
 template <typename TType>
@@ -94,13 +95,13 @@ public:
         queue_.clear();
     }
 
-    size_t size() const
+    size_t size()
     {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.size();
     }
 
-    bool empty() const
+    bool empty()
     {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.empty();
@@ -111,18 +112,8 @@ public:
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.front();
     }
-    const TType &front() const
-    {
-        std::lock_guard<std::mutex> lock(mutex_);
-        return queue_.front();
-    }
 
     TType &back()
-    {
-        std::lock_guard<std::mutex> lock(mutex_);
-        return queue_.back();
-    }
-    const TType &back() const
     {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.back();
