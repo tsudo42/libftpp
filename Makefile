@@ -43,6 +43,10 @@ SRCS_DATA_STRUCRUES	:= \
 	mathematics/ivector3.cpp \
 	mathematics/random_2D_coordinate_generator.cpp \
 	mathematics/perlin_noise_2D.cpp \
+	mathematics/angle.cpp \
+	chrono/timer.cpp \
+	chrono/chronometer.cpp \
+	chrono/cron.cpp \
 
 INCS	:= \
 	. \

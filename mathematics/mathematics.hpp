@@ -7,5 +7,6 @@
 #include "mathematics/perlin_noise_2D.hpp"
 
 #include "mathematics/pair_hash.hpp"
+#include "mathematics/angle.hpp"
 
 #endif /* MATHEMATICS_HPP */

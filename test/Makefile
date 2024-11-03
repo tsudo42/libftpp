@@ -48,6 +48,13 @@ SRCS	:= \
 	main_perlin_2D.cpp \
 	test_argparse.cpp \
 	test_dual_key_map.cpp \
+	test_coordinate_compressor.cpp \
+	test_pair_hash.cpp \
+	test_observable_value.cpp \
+	test_angle.cpp \
+	test_timer.cpp \
+	test_chronometer.cpp \
+	test_cron.cpp \
 
 INDEPENDENT_SRCS	:= \
 	main_client.cpp \

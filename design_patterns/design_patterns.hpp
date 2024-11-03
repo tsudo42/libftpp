@@ -6,4 +6,6 @@
 #include "design_patterns/singleton.hpp"
 #include "design_patterns/state_machine.hpp"
 
+#include "design_patterns/observable_value.hpp"
+
 #endif /* DESIGN_PATTERN_HPP */

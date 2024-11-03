@@ -5,5 +5,6 @@
 #include "design_patterns/design_patterns.hpp"
 #include "threading/threading.hpp"
 #include "mathematics/mathematics.hpp"
+#include "chrono/chrono.hpp"
 
 #endif /* LIBFTPP_HPP */
