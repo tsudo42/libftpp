@@ -6,5 +6,6 @@
 
 #include "data_structures/argparse.hpp"
 #include "data_structures/dual_key_map.hpp"
+#include "data_structures/coordinate_compressor.hpp"
 
 #endif /* DATA_STRUCTURES_HPP */
