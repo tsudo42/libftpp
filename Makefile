@@ -77,13 +77,12 @@ all: $(NAME)
 
 -include $(DEPS)
 
-$(OBJDIR):
-	@mkdir -p $(OBJDIR)
-
-$(OBJDIR)%.o: %.cpp
-	@mkdir -p $(OBJDIR)
+$(OBJDIR)%.o: %.cpp | $(OBJDIR)
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 	@printf "$(GR)+$(RC)"
+
+$(OBJDIR):
+	@mkdir -p $(OBJDIR)
 
 clean:
 	@printf "$(RE)--- Removing $(OBJDIR)$(RC)\n"
