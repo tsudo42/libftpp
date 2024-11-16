@@ -27,55 +27,17 @@ endif
 
 # **************************************************************************** #
 
-TARGET	:= test_pool
-SRCS	:= \
-	main_pool.cpp \
-	test_pool.cpp \
-	main_data_buffer.cpp \
-	test_data_buffer.cpp \
-	main_memento.cpp \
-	main_observer.cpp \
-	main_singleton.cpp \
-	main_state_machine.cpp \
-	main_thread_safe_iostream.cpp \
-	main_thread_safe_queue.cpp \
-	main_thread.cpp \
-	main_worker_pool.cpp \
-	main_persistent_worker.cpp \
-	main_vector_2.cpp \
-	main_vector_3.cpp \
-	main_random_2D_coordinate_generator.cpp \
-	main_perlin_2D.cpp \
-	test_argparse.cpp \
-	test_dual_key_map.cpp \
-	test_coordinate_compressor.cpp \
-	test_pair_hash.cpp \
-	test_observable_value.cpp \
-	test_angle.cpp \
-	test_timer.cpp \
-	test_chronometer.cpp \
-	test_cron.cpp \
+SRCS_DIR	= src
+OBJS_DIR	= obj
+TARGET_DIR	= target
 
-INDEPENDENT_SRCS	:= \
-	main_client.cpp \
-	main_server.cpp \
-	test_network_client.cpp \
-	test_network_server.cpp \
+MAIN_SRCS	= $(wildcard $(SRCS_DIR)/main/*.cpp)
+TEST_SRCS	= $(wildcard $(SRCS_DIR)/test/*.cpp)
+SRCS		= $(TEST_SRCS) $(MAIN_SRCS)
 
-BUILD_DIR	:= build
-
-OBJS	= \
-	$(patsubst %.cpp,$(BUILD_DIR)/%.o, $(notdir $(SRCS))) \
-	$(patsubst %.cpp,$(BUILD_DIR)/%.o, $(notdir $(INDEPENDENT_SRCS)))
-DEPS	= \
-	$(patsubst %.cpp,$(BUILD_DIR)/%.d, $(notdir $(SRCS))) \
-	$(patsubst %.cpp,$(BUILD_DIR)/%.d, $(notdir $(INDEPENDENT_SRCS)))
-
-EXECS	= $(patsubst %.cpp,$(BUILD_DIR)/%.out, $(notdir $(SRCS)))
-
-EXECS_INDEPENDENT	= $(patsubst %.cpp,$(BUILD_DIR)/%.out, $(notdir $(INDEPENDENT_SRCS)))
-
-vpath %.cpp $(sort $(dir $(SRCS)))
+OBJS	= $(patsubst $(SRCS_DIR)/%.cpp, $(OBJS_DIR)/%.o, $(SRCS))
+DEPS	= $(OBJS:.o=.d)
+TARGETS	= $(patsubst $(OBJS_DIR)/%.o, $(TARGET_DIR)/%.out, $(OBJS))
 
 GR	= \033[32;1m
 RE	= \033[31;1m
@@ -85,42 +47,43 @@ RC	= \033[0m
 
 # **************************************************************************** #
 
-run: tests
-	@printf "$(CY)~~~ RUNNING TESTS ~~~$(RC)\n"
-	@$(foreach test, $(EXECS), \
-		echo "\033[1;34mRunning: ./$(test)\033[0m"; \
-		./$(test) || exit 1;)
-	@printf "$(CY)~~~ TESTS COMPLETED ~~~$(RC)\n"
-
--include $(DEPS)
-
-$(BUILD_DIR):
-	@mkdir -p $(BUILD_DIR)
-
-tests: $(EXECS) $(EXECS_INDEPENDENT)
+all: $(TARGETS)
 	@printf "\n$(GR)=== Compiled [$(CXX) $(CXXFLAGS)] ==="
 	@printf "\n--- $(notdir $(SRCS))$(RC)\n"
 
-$(BUILD_DIR)/%.out: $(BUILD_DIR)/%.o $(LIBFTPP)
+-include $(DEPS)
+
+$(TARGET_DIR)/main/%.out: $(OBJS_DIR)/main/%.o $(LIBFTPP) | $(TARGET_DIR)/main
 	@$(CXX) $(CXXFLAGS) -o $@ $^
 	@printf "$(CY)+$(RC)"
 
-$(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
+$(TARGET_DIR)/test/%.out: $(OBJS_DIR)/test/%.o $(LIBFTPP) | $(TARGET_DIR)/test
+	@$(CXX) $(CXXFLAGS) -o $@ $^
+	@printf "$(CY)+$(RC)"
+
+$(OBJS_DIR)/main/%.o: src/main/%.cpp | $(OBJS_DIR)/main
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 	@printf "$(GR)+$(RC)"
 
-$(LIBFTPP):
-	$(MAKE) -C $(LIBFTPP_DIR)
+$(OBJS_DIR)/test/%.o: src/test/%.cpp | $(OBJS_DIR)/test
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
+	@printf "$(GR)+$(RC)"
 
-cleanlib:
-	$(MAKE) -C $(LIBFTPP_DIR) clean
+$(TARGET_DIR)/main:
+	@mkdir -p $@
+$(TARGET_DIR)/test:
+	@mkdir -p $@
+$(OBJS_DIR)/main:
+	@mkdir -p $@
+$(OBJS_DIR)/test:
+	@mkdir -p $@
 
 clean:
-	@printf "$(RE)--- Removing $(BUILD_DIR)$(RC)\n"
-	@$(RM) -r $(BUILD_DIR)
+	@printf "$(RE)--- Removing $(OBJS_DIR)$(RC)\n"
+	@$(RM) -r $(OBJS_DIR)
 
-re: clean cleanlib run
-
-.PHONY: run all tests clean re
+fclean: clean
+	@printf "$(RE)--- Removing $(TARGET_DIR)$(RC)\n"
+	@$(RM) -r $(TARGET_DIR)
 
 # **************************************************************************** #

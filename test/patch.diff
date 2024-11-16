@@ -1,0 +1,304 @@
+diff -Naur libftpp/main_client.cpp libftpp_patch/main_client.cpp
+--- libftpp/main_client.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_client.cpp	2024-11-17 02:50:41
+@@ -1,11 +1,11 @@
+-#include "client.hpp"
+-#include "thread_safe_iostream.hpp"
++#include "network/client.hpp"
++#include "threading/thread_safe_iostream.hpp"
+ #include <string>
+ 
+ int main() {
+     Client client;
+ 
+-	client.defineAction(3, [](const Message& msg){
++	client.defineAction(3, [](Message& msg){
+         int doubledValue;
+         msg >> doubledValue;
+         threadSafeCout << "Received a doubled value: " << doubledValue << std::endl;
+diff -Naur libftpp/main_data_buffer.cpp libftpp_patch/main_data_buffer.cpp
+--- libftpp/main_data_buffer.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_data_buffer.cpp	2024-11-17 02:50:41
+@@ -1,4 +1,4 @@
+-#include "data_buffer.hpp" // Assuming your DataBuffer is defined in this header
++#include "data_structures/data_buffer.hpp"
+ #include <iostream>
+ #include <string>
+ #include <exception>
+diff -Naur libftpp/main_memento.cpp libftpp_patch/main_memento.cpp
+--- libftpp/main_memento.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_memento.cpp	2024-11-17 02:50:41
+@@ -1,4 +1,4 @@
+-#include "memento.hpp"
++#include "design_patterns/memento.hpp"
+ #include <iostream>
+ 
+ class TestClass : public Memento {
+diff -Naur libftpp/main_observer.cpp libftpp_patch/main_observer.cpp
+--- libftpp/main_observer.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_observer.cpp	2024-11-17 02:50:41
+@@ -1,4 +1,4 @@
+-#include "observer.hpp"
++#include "design_patterns/observer.hpp"
+ #include <iostream>
+ 
+ enum class EventType {
+diff -Naur libftpp/main_perlin_2D.cpp libftpp_patch/main_perlin_2D.cpp
+--- libftpp/main_perlin_2D.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_perlin_2D.cpp	2024-11-17 02:50:41
+@@ -1,6 +1,6 @@
+ #include <iostream>
+ #include <cmath>
+-#include "perlin_noise_2D.hpp"
++#include "mathematics/perlin_noise_2D.hpp"
+ 
+ int main() {
+     PerlinNoise2D perlin;
+diff -Naur libftpp/main_persistant_worker.cpp libftpp_patch/main_persistant_worker.cpp
+--- libftpp/main_persistant_worker.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_persistant_worker.cpp	1970-01-01 09:00:00
+@@ -1,27 +0,0 @@
+-#include "persistent_worker.hpp"
+-#include "thread_safe_iostream.hpp"
+-#include <iostream>
+-
+-int main() {
+-    PersistentWorker worker;
+-
+-    auto task1 = []() {
+-        threadSafeCout << "Executing Task 1" << std::endl;
+-    };
+-
+-    auto task2 = []() {
+-        threadSafeCout << "Executing Task 2" << std::endl;
+-    };
+-
+-    worker.addTask("Task1", task1);
+-    worker.addTask("Task2", task2);
+-
+-    std::this_thread::sleep_for(std::chrono::seconds(1));
+-
+-    worker.removeTask("Task1");
+-
+-    std::this_thread::sleep_for(std::chrono::seconds(1));
+-
+-    return 0;
+-}
+-
+diff -Naur libftpp/main_persistent_worker.cpp libftpp_patch/main_persistent_worker.cpp
+--- libftpp/main_persistent_worker.cpp	1970-01-01 09:00:00
++++ libftpp_patch/main_persistent_worker.cpp	2024-11-17 02:50:41
+@@ -0,0 +1,27 @@
++#include "threading/persistent_worker.hpp"
++#include "threading/thread_safe_iostream.hpp"
++#include <iostream>
++
++int main() {
++    PersistentWorker worker;
++
++    auto task1 = []() {
++        threadSafeCout << "Executing Task 1" << std::endl;
++    };
++
++    auto task2 = []() {
++        threadSafeCout << "Executing Task 2" << std::endl;
++    };
++
++    worker.addTask("Task1", task1);
++    worker.addTask("Task2", task2);
++
++    std::this_thread::sleep_for(std::chrono::seconds(1));
++
++    worker.removeTask("Task1");
++
++    std::this_thread::sleep_for(std::chrono::seconds(1));
++
++    return 0;
++}
++
+diff -Naur libftpp/main_pool.cpp libftpp_patch/main_pool.cpp
+--- libftpp/main_pool.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_pool.cpp	2024-11-17 02:50:41
+@@ -1,4 +1,4 @@
+-#include "pool.hpp"
++#include "data_structures/pool.hpp"
+ #include <iostream>
+ 
+ class TestObject {
+diff -Naur libftpp/main_random_2D_coordinate_generator.cpp libftpp_patch/main_random_2D_coordinate_generator.cpp
+--- libftpp/main_random_2D_coordinate_generator.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_random_2D_coordinate_generator.cpp	2024-11-17 02:50:41
+@@ -1,7 +1,7 @@
+ #include <iostream>
+ #include <vector>
+ #include <utility>
+-#include "random_2D_coordinate_generator.hpp"
++#include "mathematics/random_2D_coordinate_generator.hpp"
+ 
+ int main() {
+     Random2DCoordinateGenerator randomGenerator;
+diff -Naur libftpp/main_server.cpp libftpp_patch/main_server.cpp
+--- libftpp/main_server.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_server.cpp	2024-11-17 02:50:41
+@@ -1,24 +1,24 @@
+-#include "server.hpp"
+-#include "thread_safe_iostream.hpp"
++#include "network/server.hpp"
++#include "threading/thread_safe_iostream.hpp"
+ #include <string>
+ 
+ int main() {
+     Server server;
+ 
+     // Define an action for messages of type 1 (int)
+-    server.defineAction(1, [&server](long long& clientID, const Message& msg){
++    server.defineAction(1, [&server](long long& clientID, Message& msg){
+         int value;
+         msg >> value;
+         threadSafeCout << "Received an int " << value << " from client " << clientID << std::endl;
+ 
+         // Send back a message of type 3 with double the value
+-        Message replyMsg;
++        Message replyMsg(3);
+         replyMsg << (value * 2);
+         server.sendTo(replyMsg, clientID);
+     });
+ 
+     // Define an action for messages of type 2 (size_t followed by characters)
+-    server.defineAction(2, [](long long& clientID, const Message& msg){
++    server.defineAction(2, [](long long& clientID, Message& msg){
+         size_t length;
+         std::string text;
+         msg >> length;
+@@ -38,7 +38,7 @@
+ 
+ 	while (!quit)
+ 	{
+-		client.update();
++		server.update();
+ 
+ 		threadSafeCout << "Server updated." << std::endl;
+ 		threadSafeCout << "Available operations :" << std::endl;
+diff -Naur libftpp/main_singleton.cpp libftpp_patch/main_singleton.cpp
+--- libftpp/main_singleton.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_singleton.cpp	2024-11-17 02:50:41
+@@ -1,11 +1,11 @@
+ #include <iostream>
+-#include "singleton.hpp"
++#include "design_patterns/singleton.hpp"
+ 
+ class MyClass {
+ public:
+ 	MyClass(int value)
+ 	{
+-		spk::cout << "MyClass constructor, with value [" << value << "]" << std::endl;
++		std::cout << "MyClass constructor, with value [" << value << "]" << std::endl;
+ 	}
+ 
+     void printMessage() {
+@@ -22,14 +22,14 @@
+         std::cout << "Exception: " << e.what() << std::endl; // Output: "Exception: Instance not yet created"
+     }
+ 
+-    Singleton<MyClass>::instantiate(42); // Setting up the instance
++    Singleton<MyClass>::instanciate(42); // Setting up the instance
+ 
+     Singleton<MyClass>::instance()->printMessage(); // Output: "Hello from MyClass"
+ 
+     try
+     {
+         // This should throw an exception as instance is already created
+-        Singleton<MyClass>::instantiate(100);
++        Singleton<MyClass>::instanciate(100);
+     } catch (const std::exception& e) {
+         std::cout << "Exception: " << e.what() << std::endl; // Output: "Exception: Instance already created"
+     }
+diff -Naur libftpp/main_state_machine.cpp libftpp_patch/main_state_machine.cpp
+--- libftpp/main_state_machine.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_state_machine.cpp	2024-11-17 02:50:41
+@@ -1,5 +1,5 @@
+ #include <iostream>
+-#include "state_machine.hpp"
++#include "design_patterns/state_machine.hpp"
+ 
+ enum class State {
+     Idle,
+@@ -46,7 +46,7 @@
+     }
+     
+     try {
+-        sm.transitionTo(State::Running);  // Should not print any transition message, and throw an exception
++        sm.transitionTo(State::Idle);  // Should not print any transition message, and throw an exception
+     } catch (const std::invalid_argument& e) {
+         std::cout << "Exception caught: " << e.what() << std::endl;  // Handle state not found
+     }
+diff -Naur libftpp/main_thread.cpp libftpp_patch/main_thread.cpp
+--- libftpp/main_thread.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_thread.cpp	2024-11-17 02:50:41
+@@ -1,7 +1,7 @@
+ #include <iostream>
+ #include <chrono>
+-#include "thread.hpp"
+-#include "thread_safe_iostream.hpp"
++#include "threading/thread.hpp"
++#include "threading/thread_safe_iostream.hpp"
+ 
+ void myFunction1() {
+     for (int i = 0; i < 5; ++i) {
+diff -Naur libftpp/main_thread_safe_iostream.cpp libftpp_patch/main_thread_safe_iostream.cpp
+--- libftpp/main_thread_safe_iostream.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_thread_safe_iostream.cpp	2024-11-17 02:50:41
+@@ -1,8 +1,8 @@
+ #include <iostream>
+ #include <thread>
+-#include "thread_safe_iostream.hpp"
++#include "threading/thread_safe_iostream.hpp"
+ 
+-ThreadSafeIOStream threadSafeCout;
++// ThreadSafeIOStream threadSafeCout;
+ 
+ void printNumbers(const std::string& p_prefix) {
+     threadSafeCout.setPrefix(p_prefix);
+diff -Naur libftpp/main_thread_safe_queue.cpp libftpp_patch/main_thread_safe_queue.cpp
+--- libftpp/main_thread_safe_queue.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_thread_safe_queue.cpp	2024-11-17 02:50:41
+@@ -1,6 +1,6 @@
+ #include <iostream>
+ #include <thread>
+-#include "thread_safe_queue.hpp"
++#include "threading/thread_safe_queue.hpp"
+ 
+ void testPush(ThreadSafeQueue<int>& p_queue, int p_value) {
+     p_queue.push_back(p_value);
+diff -Naur libftpp/main_vector_2.cpp libftpp_patch/main_vector_2.cpp
+--- libftpp/main_vector_2.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_vector_2.cpp	2024-11-17 02:50:41
+@@ -1,5 +1,5 @@
+ #include <iostream>
+-#include "ivector2.hpp"
++#include "mathematics/ivector2.hpp"
+ 
+ int main() {
+     IVector2<int> vec1(3, 4);
+diff -Naur libftpp/main_vector_3.cpp libftpp_patch/main_vector_3.cpp
+--- libftpp/main_vector_3.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_vector_3.cpp	2024-11-17 02:50:41
+@@ -1,5 +1,5 @@
+ #include <iostream>
+-#include "ivector3.hpp"
++#include "mathematics/ivector3.hpp"
+ 
+ int main() {
+     IVector3<int> vec1(3, 4, 1);
+diff -Naur libftpp/main_worker_pool.cpp libftpp_patch/main_worker_pool.cpp
+--- libftpp/main_worker_pool.cpp	2023-12-01 18:58:13
++++ libftpp_patch/main_worker_pool.cpp	2024-11-17 02:50:41
+@@ -1,6 +1,6 @@
+-#include "worker_pool.hpp"
++#include "threading/worker_pool.hpp"
+ #include <iostream>
+-#include "thread_safe_iostream.hpp"
++#include "threading/thread_safe_iostream.hpp"
+ 
+ int main() {
+     WorkerPool pool(4);
