@@ -6,5 +6,6 @@
 #include "threading/threading.hpp"
 #include "mathematics/mathematics.hpp"
 #include "chrono/chrono.hpp"
+#include "misc/misc.hpp"
 
 #endif /* LIBFTPP_HPP */
