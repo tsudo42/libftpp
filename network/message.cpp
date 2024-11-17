@@ -85,7 +85,8 @@ ssize_t Message::send(int fd, const Message &message, int flags)
 {
     std::vector<std::byte> buffer = message.serialize();
 
-    std::int64_t size_raw = ft::htonll(buffer.size());
+    std::int64_t size_raw = buffer.size();
+    size_raw = Hton(size_raw);
     ssize_t sent_size = ::send(fd, &size_raw, sizeof(size_raw), flags);
     if (sent_size <= 0)
     {
@@ -108,7 +109,7 @@ ssize_t Message::recv(int fd, Message &message, int flags)
         return received_size;
     }
 
-    size_raw = ft::ntohll(size_raw);
+    size_raw = Ntoh(size_raw);
     std::vector<std::byte> buffer;
     buffer.resize(size_raw);
     ssize_t received_body = ::recv(fd, buffer.data(), buffer.size(), flags);

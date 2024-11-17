@@ -350,7 +350,7 @@ void Server::ConnectedClient::process()
     {
         std::int64_t rawSize;
         std::memcpy(&rawSize, buffer_.data(), sizeof(rawSize));
-        pending_bufsize_ = ft::ntohll(rawSize);
+        pending_bufsize_ = Ntoh(rawSize);
 
         buffer_.erase(buffer_.begin(), buffer_.begin() + sizeof(std::int64_t));
         write_offset_ -= sizeof(std::int64_t);
