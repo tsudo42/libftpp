@@ -332,7 +332,7 @@ void Server::ConnectedClient::recv()
 
 void Server::ConnectedClient::send(const Message &message) const
 {
-    if (Message::send(fd_, message, 0) <= 0)
+    if (Message::send(fd_, message, MSG_NOSIGNAL) <= 0)
     {
         throw ConnectionError("send() failed");
     }

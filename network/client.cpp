@@ -89,8 +89,25 @@ void Client::update()
     }
 
     Message msg;
-    while (Message::recv(fd_, msg, MSG_WAITALL | MSG_DONTWAIT) > 0)
+    ssize_t status;
+    while (true)
     {
+        errno = 0;
+        status = Message::recv(fd_, msg, MSG_DONTWAIT);
+        if (status == -1)
+        {
+            if (errno == EAGAIN || errno == EWOULDBLOCK)
+            {
+                break;
+            }
+            throw ClientException("Failed to receive message");
+        }
+        else if (status == 0)
+        {
+            disconnect();
+            throw ClientException("Server disconnected");
+        }
+
         auto action = actions_.find(msg.getType());
         if (action != actions_.end())
         {

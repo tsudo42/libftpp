@@ -115,6 +115,11 @@ ssize_t Message::recv(int fd, Message &message, int flags)
         return received_body;
     }
 
+    if (received_body != size_raw)
+    {
+        throw MessageException("Received message size does not match expected size");
+    }
+
     message.deserialize(buffer);
     return received_size + received_body;
 }
