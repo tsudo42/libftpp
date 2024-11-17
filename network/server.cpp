@@ -47,8 +47,8 @@ void Server::start(const std::size_t &p_port)
         }
 
         running_.store(true);
-        acceptThread_ = std::thread(&Server::acceptClients, this);
-        handlerThread_ = std::thread(&Server::clientHandler, this);
+        multiplexer_.addSocket(serverSocket_);
+        connectionThread_ = std::thread(&Server::connectionHandler, this);
     }
     catch (const ServerException &e)
     {
@@ -186,21 +186,11 @@ void Server::reset()
         write(wakeup_fd, &byte, 1);
     }
 
-    if (acceptThread_.joinable())
+    if (connectionThread_.joinable())
     {
         try
         {
-            acceptThread_.join();
-        }
-        catch (...)
-        {
-        }
-    }
-    if (handlerThread_.joinable())
-    {
-        try
-        {
-            handlerThread_.join();
+            connectionThread_.join();
         }
         catch (...)
         {
@@ -220,75 +210,73 @@ void Server::reset()
     }
 }
 
-void Server::acceptClients() noexcept
+void Server::connectionHandler() noexcept
 {
     try
     {
-        while (running_)
+        while (running_.load())
         {
-            struct sockaddr_in clientAddr;
-            socklen_t clientAddrSize = sizeof(clientAddr);
-            errno = 0;
-            int clientSocket = accept(serverSocket_, (struct sockaddr *)&clientAddr, &clientAddrSize);
-            if (clientSocket == -1)
-            {
-                if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)
-                {
-                    continue;
-                }
-                break;
-            }
-
-            if (!multiplexer_.addSocket(clientSocket))
-            {
-                close(clientSocket);
-                continue;
-            }
-
-            {
-                std::lock_guard<std::mutex> lock(clients_mutex_);
-                clients_.emplace(next_client_id, clientSocket, std::make_shared<ConnectedClient>(next_client_id, clientSocket, messages_));
-                next_client_id++;
-            }
-        }
-    }
-    catch (...)
-    {
-    }
-    running_.store(false);
-}
-void Server::clientHandler() noexcept
-{
-    try
-    {
-        while (running_)
-        {
-            ClientID id_to_release = -1;
+            std::vector<ClientID> to_release;
             {
                 std::vector<int> events = multiplexer_.pollEvents();
-                std::lock_guard<std::mutex> lock(clients_mutex_);
+                if (running_.load() == false)
+                {
+                    break;
+                }
+
                 for (int fd : events)
                 {
-                    auto client_iter = clients_.find(fd);
-                    if (client_iter == clients_.end())
+                    if (fd == serverSocket_)
                     {
-                        continue;
-                    }
-                    std::shared_ptr<ConnectedClient> client = client_iter->second;
-                    if (client)
-                    {
-                        try
+                        struct sockaddr_in clientAddr;
+                        socklen_t clientAddrSize = sizeof(clientAddr);
+                        errno = 0;
+                        int clientSocket = accept(serverSocket_, (struct sockaddr *)&clientAddr, &clientAddrSize);
+                        if (clientSocket == -1)
                         {
-                            client->recv();
+                            if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)
+                            {
+                                continue;
+                            }
+                            throw ServerException("Failed to accept connection");
                         }
-                        catch (const ConnectedClient::ConnectionError &e)
+
+                        if (!multiplexer_.addSocket(clientSocket))
                         {
-                            id_to_release = client_iter->first.first;
+                            close(clientSocket);
+                            continue;
+                        }
+
+                        {
+                            std::lock_guard<std::mutex> lock(clients_mutex_);
+                            clients_.emplace(next_client_id, clientSocket, std::make_shared<ConnectedClient>(next_client_id, clientSocket, messages_));
+                            next_client_id++;
+                        }
+                    }
+                    else
+                    {
+                        std::lock_guard<std::mutex> lock(clients_mutex_);
+                        auto client_iter = clients_.find(fd);
+                        if (client_iter == clients_.end())
+                        {
+                            continue;
+                        }
+                        std::shared_ptr<ConnectedClient> client = client_iter->second;
+                        if (client)
+                        {
+                            try
+                            {
+                                client->recv();
+                            }
+                            catch (const ConnectedClient::ConnectionError &e)
+                            {
+                                to_release.push_back(client_iter->first.first);
+                            }
                         }
                     }
                 }
             }
-            if (id_to_release != -1)
+            for (ClientID id_to_release : to_release)
             {
                 releaseClient(id_to_release);
             }

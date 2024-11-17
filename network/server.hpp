@@ -42,14 +42,12 @@ public:
     void reset();
 
 private:
-    void acceptClients() noexcept;
-    void clientHandler() noexcept;
+    void connectionHandler() noexcept;
 
     std::atomic<bool> running_{false};
 
     int serverSocket_;
-    std::thread acceptThread_;
-    std::thread handlerThread_;
+    std::thread connectionThread_;
 
     SelectMultiplexer multiplexer_;
 
