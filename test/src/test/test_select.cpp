@@ -8,7 +8,7 @@ void test_select()
     static_assert(std::is_same<select<1, int, double, char>::type, double>::value, "Test2 failed");
     static_assert(std::is_same<select<2, int, double, char>::type, char>::value, "Test3 failed");
 
-    std::cout << "Test: default select - Passed" << std::endl;
+    std::cout << "Test1: default select - Passed" << std::endl;
 }
 
 void test_alias()
@@ -17,7 +17,7 @@ void test_alias()
     static_assert(std::is_same<Select<1, int, double, char>, double>::value, "Test2 failed");
     static_assert(std::is_same<Select<2, int, double, char>, char>::value, "Test3 failed");
 
-    std::cout << "Test: Select alias - Passed" << std::endl;
+    std::cout << "Test2: Select alias - Passed" << std::endl;
 }
 
 void test_fail()
@@ -31,6 +31,6 @@ int main()
     test_alias();
     test_fail();
 
-    std::cout << "Finished all tests." << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

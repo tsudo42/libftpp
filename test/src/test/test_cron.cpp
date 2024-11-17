@@ -13,7 +13,8 @@ void test_run_once()
 
     cron.run_once();
     assert(counter.load() == 1);
-    std::cout << "test_run_once passed!" << std::endl;
+
+    std::cout << "Test1: run_once - Passed" << std::endl;
 }
 
 void test_start_stop()
@@ -26,9 +27,9 @@ void test_start_stop()
     std::this_thread::sleep_for(std::chrono::seconds(3));
     cron.stop();
 
-    // 実行間隔が1秒なので、約3秒で2回以上実行されることを期待します
     assert(counter.load() >= 2);
-    std::cout << "test_start_stop passed!" << std::endl;
+
+    std::cout << "Test2: start and stop - Passed" << std::endl;
 }
 
 void test_move_constructor()
@@ -41,7 +42,7 @@ void test_move_constructor()
     cron2.run_once();
     assert(counter.load() == 1);
 
-    std::cout << "test_move_constructor passed!" << std::endl;
+    std::cout << "Test3: move constructor - Passed" << std::endl;
 }
 
 void test_move_assignment()
@@ -56,7 +57,7 @@ void test_move_assignment()
     cron2.run_once();
     assert(counter.load() == 1);
 
-    std::cout << "test_move_assignment passed!" << std::endl;
+    std::cout << "Test4: move assignment - Passed" << std::endl;
 }
 
 void test_multiple_cron()
@@ -103,7 +104,7 @@ void test_multiple_cron()
     assert(!cron1.is_running());
     assert(!cron2.is_running());
 
-    std::cout << "test_multiple_cron passed!" << std::endl;
+    std::cout << "Test5: multiple cron - Passed" << std::endl;
 }
 
 int main()

@@ -7,6 +7,7 @@ void test_set_and_get()
     ObservableValue<int> observable;
     observable.set(10);
     assert(observable.get() == 10);
+
     std::cout << "Test1: set and get - Passed" << std::endl;
 }
 
@@ -20,6 +21,7 @@ void test_subscription_and_notification()
         assert(value == 20); });
     observable.set(20);
     assert(notified);
+
     std::cout << "Test2: subscription and notification - Passed" << std::endl;
 }
 
@@ -37,6 +39,7 @@ void test_multiple_subscriptions()
         assert(value == 30); });
     observable.set(30);
     assert(notify_count == 2);
+
     std::cout << "Test3: multiple subscriptions - Passed" << std::endl;
 }
 
@@ -46,6 +49,6 @@ int main()
     test_subscription_and_notification();
     test_multiple_subscriptions();
 
-    std::cout << "Finished all tests." << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

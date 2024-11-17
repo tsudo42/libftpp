@@ -73,7 +73,6 @@ int TestClass::destructedCount = 0;
 
 void testObjectCreationAndDestruction()
 {
-    std::cout << "\nRunning testObjectCreationAndDestruction...\n";
     TestClass::resetCounters();
 
     {
@@ -90,12 +89,11 @@ void testObjectCreationAndDestruction()
     assert(TestClass::getConstructedCount() == 2);
     assert(TestClass::getDestructedCount() == 2);
 
-    std::cout << "\ntestObjectCreationAndDestruction passed.\n";
+    std::cout << "Test1: Object creation and destruction - Passed" << std::endl;
 }
 
 void testMemoryReuseWithoutAllocation()
 {
-    std::cout << "\nRunning testMemoryReuseWithoutAllocation...\n";
     TestClass::resetCounters();
 
     Pool<TestClass> pool(2);
@@ -120,12 +118,11 @@ void testMemoryReuseWithoutAllocation()
     assert(TestClass::getConstructedCount() == 4);
     assert(TestClass::getDestructedCount() == 4);
 
-    std::cout << "\ntestMemoryReuseWithoutAllocation passed.\n";
+    std::cout << "Test2: Memory reuse without allocation - Passed" << std::endl;
 }
 
 void testPoolDestruction()
 {
-    std::cout << "\nRunning testPoolDestruction...\n";
     TestClass::resetCounters();
 
     {
@@ -144,12 +141,11 @@ void testPoolDestruction()
     assert(TestClass::getConstructedCount() == 3);
     assert(TestClass::getDestructedCount() == 3);
 
-    std::cout << "\ntestPoolDestruction passed.\n";
+    std::cout << "Test3: Pool destruction - Passed" << std::endl;
 }
 
 void testMemoryReuseByAddressComparison()
 {
-    std::cout << "\nRunning testMemoryReuseByAddressComparison...\n";
     TestClass::resetCounters();
 
     Pool<TestClass> pool(1);
@@ -167,7 +163,7 @@ void testMemoryReuseByAddressComparison()
     }
     assert(address1 == address2);
 
-    std::cout << "\ntestMemoryReuseByAddressComparison passed.\n";
+    std::cout << "Test4: Memory reuse by address comparison - Passed" << std::endl;
 }
 
 int main()
@@ -177,6 +173,6 @@ int main()
     testPoolDestruction();
     testMemoryReuseByAddressComparison();
 
-    std::cout << "\nAll tests passed.\n";
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

@@ -131,6 +131,6 @@ int main()
     test_usage();
     test_invalid_argument();
 
-    std::cout << "Finished all tests." << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

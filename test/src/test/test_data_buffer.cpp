@@ -4,21 +4,23 @@
 #include <cassert>
 #include <cstring>
 
-struct TestStruct {
+struct TestStruct
+{
     int32_t a;
     int16_t b;
     int8_t c;
     uint64_t d;
 
-    bool operator==(const TestStruct& other) const {
+    bool operator==(const TestStruct &other) const
+    {
         return a == other.a && b == other.b && c == other.c && d == other.d;
     }
 };
 
-int main() {
+void test_integer()
+{
     DataBuffer buffer;
 
-    // Test simple integer
     int32_t intValIn = 0x12345678;
     buffer << intValIn;
 
@@ -26,9 +28,14 @@ int main() {
     buffer >> intValOut;
 
     assert(intValIn == intValOut);
-    std::cout << "Integer test passed. Value: " << std::hex << intValOut << std::endl;
 
-    // Test 16-bit integer
+    std::cout << "Test1: integer - Passed" << std::endl;
+}
+
+void test_16bit_integer()
+{
+    DataBuffer buffer;
+
     uint16_t shortValIn = 0xABCD;
     buffer << shortValIn;
 
@@ -36,9 +43,14 @@ int main() {
     buffer >> shortValOut;
 
     assert(shortValIn == shortValOut);
-    std::cout << "Short integer test passed. Value: " << std::hex << shortValOut << std::endl;
 
-    // Test struct
+    std::cout << "Test2: 16-bit integer - Passed" << std::endl;
+}
+
+void test_struct()
+{
+    DataBuffer buffer;
+
     TestStruct structValIn = {0x12345678, static_cast<int16_t>(0xABCD), static_cast<int8_t>(0xEF), 0x123456789ABCDEF0};
     buffer << structValIn;
 
@@ -46,10 +58,16 @@ int main() {
     buffer >> structValOut;
 
     assert(structValIn == structValOut);
-    std::cout << "Struct test passed." << std::endl;
 
-    // Test alignment
-    struct AlignedStruct {
+    std::cout << "Test3: struct - Passed" << std::endl;
+}
+
+void test_aligned_struct()
+{
+    DataBuffer buffer;
+
+    struct AlignedStruct
+    {
         alignas(16) uint64_t x;
         alignas(16) uint32_t y;
     };
@@ -62,9 +80,17 @@ int main() {
 
     assert(alignedValIn.x == alignedValOut.x);
     assert(alignedValIn.y == alignedValOut.y);
-    std::cout << "Alignment test passed." << std::endl;
+
+    std::cout << "Test4: aligned struct - Passed" << std::endl;
+}
+
+int main()
+{
+    test_integer();
+    test_16bit_integer();
+    test_struct();
+    test_aligned_struct();
 
     std::cout << "All tests passed!" << std::endl;
-
     return 0;
 }

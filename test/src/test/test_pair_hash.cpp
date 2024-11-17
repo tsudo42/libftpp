@@ -11,8 +11,8 @@ void test_pair_hash_basic()
     std::pair<int, int> pair2 = {1, 2};
     std::pair<int, int> pair3 = {2, 1};
 
-    assert(hasher(pair1) == hasher(pair2)); // Same pairs should have the same hash
-    assert(hasher(pair1) != hasher(pair3)); // Different pairs should have different hashes
+    assert(hasher(pair1) == hasher(pair2));
+    assert(hasher(pair1) != hasher(pair3));
 
     std::cout << "Test1: Basic pair hash - Passed" << std::endl;
 }
@@ -36,8 +36,8 @@ void test_pair_hash_different_types()
     std::pair<int, std::string> pair2 = {1, "one"};
     std::pair<int, std::string> pair3 = {2, "two"};
 
-    assert(hasher(pair1) == hasher(pair2)); // Same pairs should have the same hash
-    assert(hasher(pair1) != hasher(pair3)); // Different pairs should have different hashes
+    assert(hasher(pair1) == hasher(pair2));
+    assert(hasher(pair1) != hasher(pair3));
 
     std::cout << "Test3: Pair hash with different types - Passed" << std::endl;
 }
@@ -48,6 +48,6 @@ int main()
     test_pair_hash_with_unordered_map();
     test_pair_hash_different_types();
 
-    std::cout << "Finished all tests." << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

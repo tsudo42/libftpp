@@ -17,7 +17,8 @@ void test_constructor_and_insert()
 
     std::vector<std::size_t> compressed = compressor.compress();
     assert(compressed.size() == 3);
-    std::cout << "test_constructor_and_insert passed.\n";
+
+    std::cout << "Test1: constructor and insert - Passed" << std::endl;
 }
 
 void test_initializer_list_constructor()
@@ -26,7 +27,8 @@ void test_initializer_list_constructor()
 
     std::vector<std::size_t> compressed = compressor.compress();
     assert(compressed.size() == 3);
-    std::cout << "test_initializer_list_constructor passed.\n";
+
+    std::cout << "Test2: initializer list constructor - Passed" << std::endl;
 }
 
 void test_range_constructor()
@@ -36,7 +38,8 @@ void test_range_constructor()
 
     std::vector<std::size_t> compressed = compressor.compress();
     assert(compressed.size() == 3);
-    std::cout << "test_range_constructor passed.\n";
+
+    std::cout << "Test3: range constructor - Passed" << std::endl;
 }
 
 void test_compress_unique_values()
@@ -52,7 +55,7 @@ void test_compress_unique_values()
     assert(compressed[1] == 0);
     assert(compressed[2] == 2);
 
-    std::cout << "test_compress_unique_values passed.\n";
+    std::cout << "Test4: compress unique values - Passed" << std::endl;
 }
 
 void test_compress_with_duplicates()
@@ -71,7 +74,7 @@ void test_compress_with_duplicates()
     assert(compressed[2] == 2);
     assert(compressed[3] == 1);
 
-    std::cout << "test_compress_with_duplicates passed.\n";
+    std::cout << "Test5: compress with duplicates - Passed" << std::endl;
 }
 
 void test_big()
@@ -85,7 +88,7 @@ void test_big()
     std::vector<std::size_t> compressed = compressor.compress();
     assert(compressed == answer);
 
-    std::cout << "test_big passed.\n";
+    std::cout << "Test6: big - Passed" << std::endl;
 }
 
 void test_random()
@@ -127,7 +130,7 @@ void test_random()
         }
     }
 
-    std::cout << "test_random passed.\n";
+    std::cout << "Test7: random - Passed" << std::endl;
 }
 
 int main()
@@ -140,6 +143,6 @@ int main()
     test_big();
     test_random();
 
-    std::cout << "All tests passed successfully.\n";
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }

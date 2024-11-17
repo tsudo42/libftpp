@@ -131,6 +131,6 @@ int main()
     test_empty_and_size();
     test_iteration();
 
-    std::cout << "Finished all tests." << std::endl;
+    std::cout << "All tests passed!" << std::endl;
     return 0;
 }
