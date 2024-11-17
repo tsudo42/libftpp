@@ -2,38 +2,37 @@
 
 set -e
 
-tests=(
-    ./target/main/main_pool.out
-    ./target/main/main_data_buffer.out
-    ./target/main/main_memento.out
-    ./target/main/main_observer.out
-    ./target/main/main_singleton.out
-    ./target/main/main_state_machine.out
-    ./target/main/main_thread_safe_iostream.out
-    ./target/main/main_thread_safe_queue.out
-    ./target/main/main_thread.out
-    ./target/main/main_worker_pool.out
-    ./target/main/main_persistent_worker.out
-    ./target/main/main_vector_2.out
-    ./target/main/main_vector_3.out
-    ./target/main/main_random_2D_coordinate_generator.out
-    ./target/main/main_perlin_2D.out
-
-    ./target/test/test_pool.out
-    ./target/test/test_data_buffer.out
-    ./target/test/test_argparse.out
-    ./target/test/test_dual_key_map.out
-    ./target/test/test_coordinate_compressor.out
-    ./target/test/test_pair_hash.out
-    ./target/test/test_observable_value.out
-    ./target/test/test_angle.out
-    ./target/test/test_timer.out
-    ./target/test/test_chronometer.out
-    ./target/test/test_cron.out
-    ./target/test/test_select.out
+testdir=(
+    ./target/main
+    ./target/test
 )
 
-for test in "${tests[@]}"; do
-    echo -e "\033[1;34mRunning: ${test}\033[0m"
-    "${test}" || exit 1
+tests_ignore=(
+    main_server.out
+    main_client.out
+
+    test_network_server.out
+    test_network_client.out
+)
+
+run_tests() {
+    local dir="$1"
+    for test in "$dir"/*; do
+        filename=$(basename "$test")
+        if [[ " ${tests_ignore[@]} " =~ " ${filename} " ]]; then
+            echo -e "\033[1;33mSkipping: ${filename}\033[0m"
+            continue
+        fi
+        echo -e "\033[1;34mRunning: ${test}\033[0m"
+        "${test}" || exit 1
+    done
+}
+
+for dir in "${testdir[@]}"; do
+    if [ -d "$dir" ]; then
+        run_tests "$dir"
+        echo -e "\033[1;32mAll tests passed in: ${dir}\033[0m"
+    else
+        echo -e "\033[1;31mDirectory not found: ${dir}\033[0m"
+    fi
 done
