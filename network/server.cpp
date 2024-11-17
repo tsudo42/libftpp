@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include "network/endian.hpp"
 
 Server::Server() : serverSocket_(-1), multiplexer_() {}
 
@@ -349,7 +350,7 @@ void Server::ConnectedClient::process()
     {
         std::int64_t rawSize;
         std::memcpy(&rawSize, buffer_.data(), sizeof(rawSize));
-        pending_bufsize_ = ntohll(rawSize);
+        pending_bufsize_ = ft::ntohll(rawSize);
 
         buffer_.erase(buffer_.begin(), buffer_.begin() + sizeof(std::int64_t));
         write_offset_ -= sizeof(std::int64_t);

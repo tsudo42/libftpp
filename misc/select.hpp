@@ -1,6 +1,8 @@
 #ifndef SELECT_HPP
 #define SELECT_HPP
 
+namespace ft {
+
 template <unsigned N, typename... Cases>
 struct select;
 
@@ -17,5 +19,7 @@ struct select<0, T, Cases...>
 
 template <unsigned N, typename... Cases>
 using Select = typename select<N, Cases...>::type;
+
+} /* namespace ft */
 
 #endif /* SELECT_HPP */

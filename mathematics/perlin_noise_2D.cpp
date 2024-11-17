@@ -38,9 +38,9 @@ float PerlinNoise2D::dotGridGradient(const int &ix, const int &iy, const float &
 
 float PerlinNoise2D::sample(const float &x, const float &y) const
 {
-    int x0 = std::floorf(x);
+    int x0 = std::floor(x);
     int x1 = x0 + 1;
-    int y0 = std::floorf(y);
+    int y0 = std::floor(y);
     int y1 = y0 + 1;
 
     float sx = x - x0;

@@ -3,8 +3,10 @@
 
 #include <thread>
 #include <functional>
-#include <deque>
 #include <atomic>
+#include <mutex>
+#include <condition_variable>
+#include <deque>
 #include <utility>
 #include <stdexcept>
 

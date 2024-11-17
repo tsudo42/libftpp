@@ -35,6 +35,7 @@ SRCS_DATA_STRUCRUES	:= \
 	threading/thread.cpp \
 	threading/worker_pool.cpp \
 	threading/persistent_worker.cpp \
+	network/endian.cpp \
 	network/message.cpp \
 	network/io_multiplexer.cpp \
 	network/client.cpp \

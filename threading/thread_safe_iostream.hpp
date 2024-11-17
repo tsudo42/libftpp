@@ -3,7 +3,9 @@
 
 #include <thread>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <mutex>
 
 class ThreadSafeIOStream
 {

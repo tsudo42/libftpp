@@ -1,8 +1,10 @@
-#include "message.hpp"
+#include "network/message.hpp"
+
 #include <limits>
 #include <cstring>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include "network/endian.hpp"
 
 Message::Message(Type type) : DataBuffer(), type_(type) {}
 
@@ -83,7 +85,7 @@ ssize_t Message::send(int fd, const Message &message, int flags)
 {
     std::vector<std::byte> buffer = message.serialize();
 
-    std::int64_t size_raw = htonll(buffer.size());
+    std::int64_t size_raw = ft::htonll(buffer.size());
     ssize_t sent_size = ::send(fd, &size_raw, sizeof(size_raw), flags);
     if (sent_size <= 0)
     {
@@ -106,7 +108,7 @@ ssize_t Message::recv(int fd, Message &message, int flags)
         return received_size;
     }
 
-    size_raw = ntohll(size_raw);
+    size_raw = ft::ntohll(size_raw);
     std::vector<std::byte> buffer;
     buffer.resize(size_raw);
     ssize_t received_body = ::recv(fd, buffer.data(), buffer.size(), flags);

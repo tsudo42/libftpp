@@ -3,6 +3,7 @@
 
 #include <initializer_list>
 #include <vector>
+#include <algorithm>
 
 template <typename TType>
 class CoordinateCompressor

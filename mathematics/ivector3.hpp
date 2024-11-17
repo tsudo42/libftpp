@@ -2,6 +2,7 @@
 #define IVECTOR3_HPP
 
 #include <type_traits>
+#include <cmath>
 #include <ostream>
 
 template <typename TType>

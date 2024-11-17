@@ -5,6 +5,7 @@
 #include "network/client.hpp"
 #include "network/server.hpp"
 
+#include "network/endian.hpp"
 #include "network/io_multiplexer.hpp"
 
 #endif /* NETWORK_HPP */

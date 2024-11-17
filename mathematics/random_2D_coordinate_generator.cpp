@@ -1,7 +1,7 @@
 #include "mathematics/random_2D_coordinate_generator.hpp"
 
 #include <cstdint>
-#include <memory>
+#include <cstring>
 
 Random2DCoordinateGenerator::Random2DCoordinateGenerator(long long seed)
     : seed_(seed) {}
